@@ -5,7 +5,7 @@ from config import config
 
 
 # Debug
-import flask_profiler
+# import flask_profiler
 
 db = SQLAlchemy()
 

@@ -31,8 +31,6 @@ def make_shell_context():
 @app.cli.command()
 def deploy():
     """Run deployment tasks."""
-    # migrate database to latest revision
-    upgrade()
 
     # Insert fake data
-    mock.everything()
+    # mock.everything()
