@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/reuseman/GoOutSafe.svg?branch=main)](https://travis-ci.org/reuseman/GoOutSafe) [![Coverage Status](https://coveralls.io/repos/github/reuseman/GoOutSafe/badge.svg?branch=main)](https://coveralls.io/github/reuseman/GoOutSafe?branch=main) [![Requirements Status](https://requires.io/github/reuseman/GoOutSafe/requirements.svg?branch=main)](https://requires.io/github/reuseman/GoOutSafe/requirements/?branch=main)
-
+[![Build Status](https://travis-ci.org/Squad002/booking-service.svg?branch=main)](https://travis-ci.org/Squad002/booking-service)
+[![Coverage Status](https://coveralls.io/repos/github/Squad002/bookingservice/badge.svg?branch=main)](https://coveralls.io/github/Squad002/booking-service?branch=main)
 # Getting started
 
 ## Development
