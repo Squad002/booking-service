@@ -18,6 +18,9 @@
     docker build -t booking-service:latest . 
     docker run -p 5000:5000 booking-service:latest
 
+### MySQL Image
+    docker run --name mysql -d -p 3306:3306 -e MYSQL_RANDOM_ROOT_PASSWORD=yes -e MYSQL_DATABASE=gooutsafe -e MYSQL_USER=gooutsafe -e MYSQL_PASSWORD=my-secret-pw mysql:8
+
 ## Tests with coverage
 Inside GoOutSafe run (it will automatically use the configuration in pyproject.toml):
 
@@ -33,3 +36,4 @@ If you want to see an interactive report run:
 
 ### E-R Diagram in PlantUML
 ![](docs/plantUML-er.png)
+
