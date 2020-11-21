@@ -1,0 +1,125 @@
+openapi: 3.0.1
+info:
+  title: Booking Service API
+  description: Booking from GoOutSafe with Microservices
+  version: "0.1"
+servers:
+  - url: /
+paths:
+  /booking:
+    post:
+      tags:
+        - Booking
+      summary: Create a new booking
+      x-openapi-router-controller: microservice.views.booking_view
+      operationId: insert_booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Booking"
+      responses:
+        "201":
+          description: Created booking
+        "404": 
+          description: No free table for the booking
+  /booking/confirm:
+    post:
+      tags:
+        - Booking
+      summary: Confirm a booking
+      x-openapi-router-controller: microservice.views.booking_view
+      operationId: confirm_booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Booking confirm"
+      responses:
+        "201":
+          description: Booking confirmed
+        "404":
+          description: Booking not found
+        "401":
+          description: Booking error
+
+components:
+  schemas:
+    Booking:
+      required:
+        - user_id
+        - restaurant_id
+        - booking_number
+        - start_booking
+        - end_booking
+      type: object
+      properties:
+        user_id:
+          type: integer
+          description: User identifier
+          example: 1
+        restaurant_id:
+          type: integer
+          description: Restaurant identifier
+          example: 1
+        booking_number:
+          type: integer
+          description: Booking identifier
+          readOnly: true
+          example: 1
+        start_booking:
+          type: string
+          description: Start date and hour of booking
+          example: "2020-11-05 10:30"
+        end_booking:
+          type: string
+          description: Start date and hour of booking
+          example: "2020-11-05 12:00"
+        confirmed_booking:
+          type: boolean
+          description: It specify if the booking was confirmed
+          example: True
+
+    Booking confirm:
+      required:
+        - booking_number
+        - users
+      type: object
+      properties:
+        booking_number:
+          type: integer
+          description: Unique identifier of the booking
+          example: 8
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/Booking user"
+
+    Booking user:
+      required:
+        - firstname
+        - lastname
+        - email
+        - fiscal_code
+      type: object
+      properties:
+        firstname:
+          type: string
+          description: Name of the user
+          example: Linus
+        lastname:
+          type: string
+          description: Surname of the user
+          example: Torvalds
+        email:
+          type: string
+          description: Email of the user
+          example: linus@torvalds.com
+        fiscal_code:
+          type: string
+          description: Fiscalcode of the user
+          example: FCGZPX89A57E015V
+          maxLength: 16
+          minLength: 16
