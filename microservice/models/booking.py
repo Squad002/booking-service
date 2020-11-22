@@ -6,6 +6,7 @@ class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, nullable=False)
     table_id = db.Column(db.Integer, nullable=False)
+    restaurant_id = db.Column(db.Integer, nullable=False)
     booking_number = db.Column(db.Integer, nullable=False)
     start_booking = db.Column(db.DateTime, nullable=False)
     end_booking = db.Column(db.DateTime, nullable=False)
@@ -26,3 +27,5 @@ class Booking(db.Model):
 
         return id in id_user_list
     
+    def serialize(self):
+        return dict([(k,v) for k,v in self.__dict__.items() if k[0] != '_'])

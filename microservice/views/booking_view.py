@@ -4,8 +4,10 @@ from microservice import db
 from sqlalchemy import func
 from microservice.models import Booking
 from connexion import request
-from datetime import datetime
+from datetime import datetime, date
 from . import fake_api
+
+
 
 booking = Blueprint("booking", __name__)
 
@@ -19,12 +21,14 @@ def get_next_booking_number():
 
     return booking_number+1
 
+
 def get_free_table(tables_list, start_booking):
     for table_id in tables_list:
         t = db.session.query(Booking).filter_by(table_id=table_id, start_booking=start_booking).first()
         if t is None: 
             return table_id
     return None
+
 
 def insert_booking():
     request.get_data()
@@ -45,6 +49,7 @@ def insert_booking():
             Booking(
                 user_id=data["user_id"],
                 table_id=table,
+                restaurant_id=data["restaurant_id"],
                 booking_number=booking_number,
                 start_booking=start_booking,
                 end_booking=end_booking,
@@ -54,6 +59,7 @@ def insert_booking():
         db.session.commit()
 
     return "Created", 201
+
 
 def confirm_booking():
     request.get_data()
@@ -106,6 +112,7 @@ def confirm_booking():
             Booking(
                user_id=user["id"],
                table_id=booking.table_id,
+               restaurant_id=booking.restaurant_id,
                booking_number=booking_number,
                start_booking=booking.start_booking,
                end_booking=booking.end_booking,
@@ -123,3 +130,34 @@ def confirm_booking():
         return "Booking confirmed", 201
 
 
+def bookings_list(user_id):
+    list_booking = db.session.query(Booking).filter(
+        Booking.user_id == user_id
+    ).all()
+
+    bookings_list_serialized=[]
+    for booking in list_booking:
+        bookings_list_serialized.append(booking.serialize())
+
+    return jsonify(bookings_list_serialized), 200
+
+
+def delete_booking(booking_number, user_id):
+    db.session.query(Booking).filter_by(booking_number=booking_number, user_id=user_id).delete()
+    db.session.commit()
+
+    return "Booking deleted", 200
+
+
+def checkin_booking_check(booking_number):
+    response = (
+        db.session.query(Booking.confirmed_booking, Booking.checkin)
+        .filter_by(booking_number=booking_number)
+        .order_by(Booking.checkin.desc())
+        .first()
+    )
+    
+    if response is None:
+        return "Booking not found", 404
+    else:
+        return jsonify(response), 200

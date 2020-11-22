@@ -6,7 +6,7 @@ info:
 servers:
   - url: /
 paths:
-  /booking:
+  /bookings:
     post:
       tags:
         - Booking
@@ -24,6 +24,29 @@ paths:
           description: Created booking
         "404": 
           description: No free table for the booking
+  /bookings/{booking_number}:
+    delete:
+      tags:
+        - Booking
+      summary: Delete the booking of user_id identified by booking_number
+      x-openapi-router-controller: microservice.views.booking_view
+      operationId: delete_booking
+      parameters:
+        - in: path
+          name: booking_number
+          required: true
+          description: Booking number
+          schema:
+            type: integer
+        - in: query
+          name: user_id
+          required: true
+          description: User id
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Booking deleted
   /booking/confirm:
     post:
       tags:
@@ -44,6 +67,143 @@ paths:
           description: Booking not found
         "401":
           description: Booking error
+  /bookings/user/{user_id}:
+    get:
+      tags:
+        - Booking
+      summary: Get all the bookings of user_id 
+      x-openapi-router-controller: microservice.views.booking_view
+      operationId: bookings_list
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          description: User id
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Bookings list"
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Booking checkin"   
+  /booking/{booking_number}/checkin:
+    get:
+      tags:
+        - Booking
+      summary: Return if booking was confirmed and checkin was done
+      x-openapi-router-controller: microservice.views.booking_view
+      operationId: checkin_booking_check
+      parameters:
+        - in: path
+          name: booking_number
+          required: true
+          description: Booking identifier
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Flag for checkin and booking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Checkin booking"
+        "404":
+          description: Booking not found
+  /reservations:
+    get:
+      tags:
+        - Reservation
+      summary: Return all bookings of restaurant_id of a specific day 
+      x-openapi-router-controller: microservice.views.reservation_view
+      operationId: reservations_list
+      parameters:
+        - in: query
+          name: restaurant_id
+          required: True
+          description: Restaurant identifier
+          schema:
+            type: integer
+        - in: query
+          name: start_day
+          required: True
+          description: Day of reservations
+          example: "2020-11-22"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Reservations list"
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Reservations"
+  /reservations/{booking_number}:
+    get:
+      tags:
+        - Reservation
+      summary: Return the list of users of the reservation identified by booking_number
+      x-openapi-router-controller: microservice.views.reservation_view
+      operationId: reservation
+      parameters:
+        - in: path
+          name: booking_number
+          required: true
+          description: Booking identifier
+          example: 1
+          schema: 
+            type: integer
+      responses:
+        "200":
+          description: User list
+        "404":
+          description: Reservation not found
+    delete:
+      tags:
+        - Reservation
+      summary: Delete all reservations identified by booking_number
+      x-openapi-router-controller: microservice.views.reservation_view
+      operationId: delete_reservations
+      parameters:
+        - in: path
+          name: booking_number
+          description: Booking identifier
+          example: 1
+          schema: 
+            type: integer
+      responses:
+        "200":
+          description: Reservations deleted
+  /reservations/{booking_number}/permissions:
+    get:
+      tags:
+        - Reservation
+      summary: Check if operator_id has the permissions
+      x-openapi-router-controller: microservice.views.reservation_view
+      operationId: check_permissions_operator
+      parameters:
+        - in: path
+          name: booking_number
+          required: true
+          description: Booking identifier
+          example: 1
+          schema: 
+            type: integer
+        - in: query
+          name: operator_id
+          required: true
+          description: Operator identifier
+          example: 1
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Operatos has the permissions
+        "403":
+          description: Operator hasn't the permissions
 
 components:
   schemas:
@@ -81,6 +241,19 @@ components:
           type: boolean
           description: It specify if the booking was confirmed
           example: True
+
+    Booking checkin:
+      allOf:
+        - $ref: '#/components/schemas/Booking'
+        - type: object
+          required:
+            - checkin
+          properties:
+            checkin:
+              type: integer
+              description: Indicate if the checkin was done or not
+              example: True
+
 
     Booking confirm:
       required:
@@ -123,3 +296,38 @@ components:
           example: FCGZPX89A57E015V
           maxLength: 16
           minLength: 16
+
+    Checkin booking:
+      required:
+        - confirmed_booking
+        - checkin
+      type: object
+      properties:
+        confirmed_booking:
+          type: boolean
+          description: Flag for booking
+          example: true
+        checkin:
+          type: boolean
+          description: Flag for checkin
+          example: false
+
+    Reservations:
+      required:
+        - booking_number
+        - people_number
+        - restaurant_name
+      type: object
+      properties:
+        booking_number:
+          type: integer
+          description: Booking identifier
+          example: 1
+        people_number:
+          type: integer
+          description: Number of people for this booking
+          example: 3
+        restaurant_name:
+          type: string
+          description: Restaturant's name
+          example: "Pizzeria Gino Sorbillo"
