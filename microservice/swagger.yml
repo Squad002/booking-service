@@ -24,6 +24,27 @@ paths:
           description: Created booking
         "404": 
           description: No free table for the booking
+    get:
+      tags:
+        - Booking
+      summary: Get all the bookings
+      x-openapi-router-controller: microservice.views.booking_view
+      operationId: bookings_list
+      parameters:
+        - in: query
+          name: user_id
+          required: false
+          description: User id
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Bookings list"
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Booking checkin"  
   /bookings/{booking_number}:
     delete:
       tags:
@@ -66,30 +87,8 @@ paths:
         "404":
           description: Booking not found
         "401":
-          description: Booking error
-  /bookings/user/{user_id}:
-    get:
-      tags:
-        - Booking
-      summary: Get all the bookings of user_id 
-      x-openapi-router-controller: microservice.views.booking_view
-      operationId: bookings_list
-      parameters:
-        - in: path
-          name: user_id
-          required: true
-          description: User id
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: "Bookings list"
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: "#/components/schemas/Booking checkin"   
-  /booking/{booking_number}/checkin:
+          description: Booking error 
+  /bookings/{booking_number}/checkin:
     get:
       tags:
         - Booking
@@ -170,6 +169,7 @@ paths:
       parameters:
         - in: path
           name: booking_number
+          required: true
           description: Booking identifier
           example: 1
           schema: 
@@ -199,11 +199,37 @@ paths:
           example: 1
           schema:
             type: integer
+        - in: query
+          name: restaurant_id
+          required: true
+          description: Restaurant identifier
+          example: 1
+          schema:
+            type: integer
       responses:
         "200":
-          description: Operatos has the permissions
+          description: Operator has the permissions
         "403":
           description: Operator hasn't the permissions
+  /reservations/checkin:
+    post:
+      tags:
+        - Reservation
+      summary: Do the check-in of the user in user_list for the booking identified by booking_number
+      x-openapi-router-controller: microservice.views.reservation_view
+      operationId: checkin_booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Reservation checkin"
+      responses:
+        "200":
+          description: Checkin done
+        "404":
+          description: "Booking not found"
+  
 
 components:
   schemas:
@@ -214,6 +240,7 @@ components:
         - booking_number
         - start_booking
         - end_booking
+        - seats
       type: object
       properties:
         user_id:
@@ -241,6 +268,10 @@ components:
           type: boolean
           description: It specify if the booking was confirmed
           example: True
+        seats:
+          type: integer
+          description: Number of people for this booking
+          example: 5
 
     Booking checkin:
       allOf:
@@ -331,3 +362,23 @@ components:
           type: string
           description: Restaturant's name
           example: "Pizzeria Gino Sorbillo"
+
+    Reservation checkin:
+      required:
+        - booking_number
+        - user_list
+      type: object
+      properties:
+        booking_number:
+          type: integer
+          description: Booking identifier
+          example: 1
+        user_list:
+          items:
+            required:
+              - user_id
+            properties:
+              user_id: 
+                type: integer
+                description: User identifier
+                example: 1

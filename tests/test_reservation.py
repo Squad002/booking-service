@@ -52,7 +52,7 @@ def test_permissions_operator(client, db):
     )
 
     res = client.get(
-        "/reservations/1/permissions?operator_id=6"
+        "/reservations/1/permissions?operator_id=1&restaurant_id=1"
     )
 
     assert res.status_code == 200
@@ -65,7 +65,20 @@ def test_permissions_operator_not_restaurant(client, db):
     )
 
     res = client.get(
-        "/reservations/2/permissions?operator_id=6"
+        "/reservations/1/permissions?operator_id=1&restaurant_id=2"
+    )
+
+    assert res.status_code == 403
+
+
+def test_permissions_operator_not_booking(client, db):
+    res = client.post(
+        "/bookings",
+        json=booking_true
+    )
+
+    res = client.get(
+        "/reservations/2/permissions?operator_id=1&restaurant_id=1"
     )
 
     assert res.status_code == 403
@@ -78,7 +91,7 @@ def test_not_permissions_operator(client, db):
     )
 
     res = client.get(
-        "/reservations/1/permissions?operator_id=1"
+        "/reservations/1/permissions?operator_id=2&restaurant_id=1"
     )
 
     assert res.status_code == 403
@@ -113,7 +126,8 @@ booking_true = {
   "end_booking": "2020-11-05 12:00",
   "restaurant_id": 1,
   "start_booking": "2020-11-05 10:30",
-  "user_id": 1
+  "user_id": 1,
+  "seats": 5
 }
 
 confirm_booking = {

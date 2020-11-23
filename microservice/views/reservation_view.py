@@ -24,7 +24,7 @@ def reservations_list(restaurant_id, start_day):
 
     reservations_list=[]
     for booking in booking_list:
-        restaurant_name = fake_api.restaurant_name(booking[0].id)
+        restaurant_name = fake_api.restaurant_name(booking[0].restaurant_id)
         reservations_list.append({
             "booking_numer": booking[0].booking_number,
             "restaurant_name": restaurant_name,
@@ -34,7 +34,7 @@ def reservations_list(restaurant_id, start_day):
     return reservations_list, 200
 
 
-def reservation(booking_number):
+def reservation(booking_number): #TODO sistemare swagger ui
     booking_list = (
         db.session.query(Booking)
         .filter_by(booking_number=booking_number)
@@ -46,25 +46,30 @@ def reservation(booking_number):
 
     user_list=[]
     for user in booking_list:
-        get_user = fake_api.get_user(user.user_id)
+        get_user = fake_api.get_user_id(user.user_id)
         user_list.append(get_user)
 
     return jsonify(user_list), 200
 
 
-def check_permissions_operator(booking_number, operator_id):
-    restaurant_id = (
+def check_permissions_operator(booking_number, operator_id, restaurant_id):
+    restaurant_id_db = (
         db.session.query(Booking.restaurant_id)
         .filter_by(booking_number=booking_number)
         .first()
     )
 
-    if restaurant_id is None:
+    if restaurant_id_db is None :
+        return "Operation denied", 403
+    
+    restaurant_id_db = restaurant_id_db[0]
+
+    if restaurant_id_db != restaurant_id:
         return "Operation denied", 403
 
     operator = fake_api.get_operator_id(restaurant_id)
 
-    if operator["operator_id"] == operator_id:
+    if operator == operator_id:
         return "Operation allowed", 200
     else:
         return "Operation denied", 403
@@ -75,3 +80,28 @@ def delete_reservations(booking_number):
     db.session.commit()
 
     return "Reservation deleted", 200
+
+
+def checkin_booking(): #TODO check
+    request.get_data()
+
+    checkin_list = request.json
+
+    booking_number = checkin_list["booking_number"]
+    user_list = checkin_list["user_list"]
+
+    check_booking = db.session.query(Booking).filter_by(booking_number=booking_number).first()
+
+    if check_booking is None:
+        return "Booking not found", 404
+
+    for user in user_list:
+        aux = (
+            db.session.query(Booking)
+            .filter_by(user_id=user["user-id"], booking_number=booking_number)
+            .first()
+        )
+        aux.checkin = True
+        db.session.commit()
+    
+    return "Checkin done", 200

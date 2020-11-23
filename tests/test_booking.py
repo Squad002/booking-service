@@ -48,11 +48,11 @@ def test_multiple_booking(client, db):
         json=confirm_booking
     )
 
-    booking = db.session.query(Booking).filter_by(booking_number=1, user_id=2).first()
+    booking = db.session.query(Booking).filter_by(booking_number=1, user_id=22).first()
     assert res.status_code == 201
     assert booking.confirmed_booking == True
     assert booking.table_id == 1
-    assert booking.user_id == 2
+    assert booking.user_id == 22
 
 
 def test_multiple_booking_id_desnt_exists(client,db):
@@ -107,10 +107,12 @@ def test_get_bookings_user(client, db):
     )
 
     res = client.get(
-        "/bookings/user/1"
+        "/bookings?user_id=1"
     )
 
+
     assert res.status_code == 200
+    assert res.json[0]["user_id"] == 1
 
 
 def test_delete_booking(client, db):
@@ -147,7 +149,7 @@ def test_checkin_booking(client, db):
     )
 
     res = client.get(
-        "/booking/1/checkin"
+        "/bookings/1/checkin"
     )
 
     assert res.status_code == 200
@@ -169,7 +171,8 @@ booking_true = {
   "end_booking": "2020-11-05 12:00",
   "restaurant_id": 1,
   "start_booking": "2020-11-05 10:30",
-  "user_id": 1
+  "user_id": 1,
+  "seats": 5
 }
 
 
@@ -178,7 +181,8 @@ booking_false = {
   "end_booking": "2020-11-05 12:00",
   "restaurant_id": 1,
   "start_booking": "2020-11-05 10:30",
-  "user_id": 1
+  "user_id": 1,
+  "seats": 5
 }
 
 confirm_booking = {
