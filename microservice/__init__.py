@@ -7,9 +7,9 @@ db = SQLAlchemy()
 
 
 def create_app(config_name, updated_variables=None):
-    application = connexion.App(__name__)
-    application.add_api("swagger.yml")
-    app = application.app
+    connexion_app = connexion.App(__name__, specification_dir="../")
+    connexion_app.add_api("swagger.yml")
+    app = connexion_app.app
     app.config.from_object(config[config_name])
     if updated_variables:
         app.config.update(updated_variables)

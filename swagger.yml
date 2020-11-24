@@ -22,7 +22,7 @@ paths:
       responses:
         "201":
           description: Created booking
-        "404": 
+        "404":
           description: No free table for the booking
     get:
       tags:
@@ -44,7 +44,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: "#/components/schemas/Booking checkin"  
+                  $ref: "#/components/schemas/Booking checkin"
   /bookings/{booking_number}:
     delete:
       tags:
@@ -87,7 +87,7 @@ paths:
         "404":
           description: Booking not found
         "401":
-          description: Booking error 
+          description: Booking error
   /bookings/{booking_number}/checkin:
     get:
       tags:
@@ -115,7 +115,7 @@ paths:
     get:
       tags:
         - Reservation
-      summary: Return all bookings of restaurant_id of a specific day 
+      summary: Return all bookings of restaurant_id of a specific day
       x-openapi-router-controller: microservice.views.reservation_view
       operationId: reservations_list
       parameters:
@@ -153,7 +153,7 @@ paths:
           required: true
           description: Booking identifier
           example: 1
-          schema: 
+          schema:
             type: integer
       responses:
         "200":
@@ -172,7 +172,7 @@ paths:
           required: true
           description: Booking identifier
           example: 1
-          schema: 
+          schema:
             type: integer
       responses:
         "200":
@@ -190,7 +190,7 @@ paths:
           required: true
           description: Booking identifier
           example: 1
-          schema: 
+          schema:
             type: integer
         - in: query
           name: operator_id
@@ -229,7 +229,6 @@ paths:
           description: Checkin done
         "404":
           description: "Booking not found"
-  
 
 components:
   schemas:
@@ -275,7 +274,7 @@ components:
 
     Booking checkin:
       allOf:
-        - $ref: '#/components/schemas/Booking'
+        - $ref: "#/components/schemas/Booking"
         - type: object
           required:
             - checkin
@@ -284,7 +283,6 @@ components:
               type: integer
               description: Indicate if the checkin was done or not
               example: True
-
 
     Booking confirm:
       required:
@@ -378,7 +376,7 @@ components:
             required:
               - user_id
             properties:
-              user_id: 
+              user_id:
                 type: integer
                 description: User identifier
                 example: 1
