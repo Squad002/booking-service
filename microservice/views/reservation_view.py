@@ -49,7 +49,7 @@ def reservation(booking_number): #TODO sistemare swagger ui
     user_list=[]
     for user in booking_list:
         get_user = fake_api.get_user_id(user.user_id)
-        user_list.append(get_user)
+        user_list.append(get_user[0])
 
     return jsonify(user_list), 200
 
@@ -84,7 +84,7 @@ def delete_reservations(booking_number):
     return "Reservation deleted", 200
 
 
-def checkin_booking(): #TODO test
+def checkin_booking(): 
     request.get_data()
 
     checkin_list = request.json

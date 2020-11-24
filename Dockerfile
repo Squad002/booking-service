@@ -19,7 +19,7 @@ RUN venv/bin/pip install -r requirements/docker.txt
 
 # Move code
 COPY microservice/ microservice/
-COPY app.py config.py boot.sh ./
+COPY app.py config.py boot.sh swagger.yml ./
 
 # Permissions
 RUN chown -R gooutsafe:gooutsafe ./

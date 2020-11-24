@@ -170,6 +170,11 @@ paths:
       responses:
         "200":
           description: User list
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/User Reservation"
         "404":
           description: Reservation not found
     delete:
@@ -397,3 +402,50 @@ components:
                 type: integer
                 description: User identifier
                 example: 1
+
+    User Reservation:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier
+          readOnly: true
+          example: 5
+        firstname:
+          type: string
+          description: The first name of the user
+          maxLength: 128
+          example: "Mario"
+        lastname:
+          type: string
+          description: The last name of the user
+          maxLength: 128
+          example: "Rossi"
+        email:
+          type: string
+          description: The email of the user
+          maxLength: 128
+          example: "mariorossi@example.com"
+        password:
+          type: string
+          description: The password of the user
+          maxLength: 128
+          example: "ekjc39rf$nj"
+        fiscalcode:
+          type: string
+          description: The fiscal code of the user
+          maxLength: 128
+          example: "RSSMRA20T31H501W"
+        phonenumber:
+          type: string
+          description: The phone number of the user
+          maxLength: 40
+          example: "+39 33133133130"
+        birthdate:
+          type: string
+          description: The date of birth of the user
+          example: "2020-12-31"
+        marked:
+          type: boolean
+          description: "Flag for positiveness to COVID-19"
+          example: true
