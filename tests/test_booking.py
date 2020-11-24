@@ -1,6 +1,7 @@
 from tests.fixtures import app, client, db
 from microservice.models import Booking
 
+user_id = 12
 
 def test_okay_booking(client, db):
     res = client.post(
@@ -37,7 +38,7 @@ def test_all_tables_booked(client, db):
     assert res.status_code == 404
 
 
-def test_multiple_booking(client, db):
+def test_multiple_booking_new_user(client, db):
     res = client.post(
         "/bookings",
         json=booking_false
@@ -45,17 +46,50 @@ def test_multiple_booking(client, db):
 
     res = client.post(
         "/booking/confirm",
-        json=confirm_booking
+        json=confirm_booking #this user isn't in user-service db
     )
 
-    booking = db.session.query(Booking).filter_by(booking_number=1, user_id=22).first()
+    booking = db.session.query(Booking).filter_by(booking_number=1, user_id=user_id).first()
     assert res.status_code == 201
     assert booking.confirmed_booking == True
     assert booking.table_id == 1
-    assert booking.user_id == 22
+    assert booking.user_id == user_id
 
 
-def test_multiple_booking_id_desnt_exists(client,db):
+def test_multiple_booking_user_already_in_db(client, db):
+    res = client.post(
+        "/bookings",
+        json=booking_false
+    )
+
+    res = client.post(
+        "/booking/confirm",
+        json=confirm_booking #this user is in user-service db
+    )
+
+    booking = db.session.query(Booking).filter_by(booking_number=1, user_id=user_id).first()
+    assert res.status_code == 201
+    assert booking.confirmed_booking == True
+    assert booking.table_id == 1
+    assert booking.user_id == user_id
+
+
+def test_multiple_booking_email_already_used(client, db):
+    res = client.post(
+        "/bookings",
+        json=booking_false
+    )
+
+    res = client.post(
+        "/booking/confirm",
+        json=confirm_booking_email_already_used
+    )
+
+    booking = db.session.query(Booking).filter_by(booking_number=1, user_id=user_id).first()
+    assert res.status_code == 401
+
+
+def test_multiple_booking_id_doesnt_exists(client,db):
     res = client.post(
         "/booking/confirm",
         json=confirm_booking
@@ -154,6 +188,7 @@ def test_checkin_booking(client, db):
 
     assert res.status_code == 200
 
+
 def test_checkin_booking_wrong(client, db):
     res = client.post(
         "/bookings",
@@ -161,10 +196,11 @@ def test_checkin_booking_wrong(client, db):
     )
 
     res = client.get(
-        "/booking/2/checkin"
+        "/bookings/2/checkin"
     )
 
     assert res.status_code == 404
+    assert res.json == "Booking not found"
 
 booking_true = {
   "confirmed_booking": True,
@@ -193,6 +229,30 @@ confirm_booking = {
       "lastname": "Torvalds",
       "email": "linus@torvalds.com",
       "fiscal_code": "FCGZPX89A57E015V"
+    }
+  ]
+}
+
+confirm_booking_new_user = {
+  "booking_number": 1,
+  "users": [
+    {
+      "firstname": "Chuck",
+      "lastname": "Norris",
+      "email": "chuck@norris.it",
+      "fiscal_code": "FCGZPX89A57E0155"
+    }
+  ]
+}
+
+confirm_booking_email_already_used = {
+  "booking_number": 1,
+  "users": [
+    {
+      "firstname": "Linus",
+      "lastname": "Torvalds",
+      "email": "example@example.com",
+      "fiscal_code": "FCGZPX89A57E015Q"
     }
   ]
 }

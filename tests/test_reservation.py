@@ -120,6 +120,32 @@ def test_delete_reservation(client, db):
     assert not booking_list
 
 
+def test_checkin_booking(client, db):
+    res = client.post(
+        "/bookings",
+        json=booking_true
+    )
+
+    res = client.post(
+        "/reservations/checkin",
+        json=user_checkin
+    )
+
+    booking = db.session.query(Booking).filter_by(booking_number=1).first()
+
+    assert res.status_code == 200
+    assert booking.checkin == True
+
+
+def test_checkin_booking_wrong(client, db):
+    res = client.post(
+        "/reservations/checkin",
+        json=user_checkin
+    )
+
+
+    assert res.status_code == 404
+
 
 booking_true = {
   "confirmed_booking": True,
@@ -138,6 +164,15 @@ confirm_booking = {
       "lastname": "Torvalds",
       "email": "linus@torvalds.com",
       "fiscal_code": "FCGZPX89A57E015V"
+    }
+  ]
+}
+
+user_checkin = {
+  "booking_number": 1,
+  "user_list": [
+    {
+      "user_id": 1
     }
   ]
 }

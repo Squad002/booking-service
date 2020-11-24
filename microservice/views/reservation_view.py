@@ -4,6 +4,8 @@ from microservice import db
 from microservice.models import Booking
 from . import fake_api
 from flask import jsonify
+from connexion import request
+
 
 
 def reservations_list(restaurant_id, start_day):
@@ -82,7 +84,7 @@ def delete_reservations(booking_number):
     return "Reservation deleted", 200
 
 
-def checkin_booking(): #TODO check
+def checkin_booking(): #TODO test
     request.get_data()
 
     checkin_list = request.json
@@ -98,7 +100,7 @@ def checkin_booking(): #TODO check
     for user in user_list:
         aux = (
             db.session.query(Booking)
-            .filter_by(user_id=user["user-id"], booking_number=booking_number)
+            .filter_by(user_id=user["user_id"], booking_number=booking_number)
             .first()
         )
         aux.checkin = True

@@ -37,6 +37,18 @@ paths:
           description: User id
           schema:
             type: integer
+        - in: query
+          name: restaurant_id
+          required: false
+          description: Restaurant id
+          schema:
+            type: integer
+        - in: query
+          name: table_id
+          required: false
+          description: Table id
+          schema:
+            type: integer
       responses:
         "200":
           description: "Bookings list"
@@ -278,11 +290,16 @@ components:
         - type: object
           required:
             - checkin
+            - table_id
           properties:
             checkin:
-              type: integer
+              type: boolean
               description: Indicate if the checkin was done or not
               example: True
+            table_id:
+              type: integer
+              description: Table identifier
+              example: 1
 
     Booking confirm:
       required:
