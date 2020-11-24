@@ -1,8 +1,9 @@
+from flask import request
 from microservice.models import (
     Booking,
 )
 from microservice.services import mock
-from microservice import create_app
+from microservice import create_app, db
 
 
 import os, connexion
@@ -21,6 +22,7 @@ app.logger.info("Botting finished")
 @app.shell_context_processor
 def make_shell_context():
     from microservice import db
+
     return {
         "db": db,
         "mock": mock,
@@ -31,6 +33,17 @@ def make_shell_context():
 @app.cli.command()
 def deploy():
     """Run deployment tasks."""
+    mock.everything()
 
-    # Insert fake data
-    # mock.everything()
+
+@app.route("/testing/services/booking/db", methods=["GET", "DELETE"])
+def delete_db():
+    if request.method == "GET":
+        return "Available", 204
+    elif request.method == "DELETE":
+        db.session.query(Booking).delete()
+        db.session.commit()
+
+        return "OK", 204
+
+    return "Error", 404
