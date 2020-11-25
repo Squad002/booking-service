@@ -49,6 +49,12 @@ paths:
           description: Table id
           schema:
             type: integer
+        - in: query
+          name: booking_number
+          required: false
+          description: Booking identifier
+          schema:
+            type: integer
       responses:
         "200":
           description: "Bookings list"

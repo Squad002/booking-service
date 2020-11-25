@@ -37,7 +37,7 @@ def generate_user(firstname, lastname, fiscalcode, email):
         "lastname": lastname,
     }
 
-    requests.post(
+    res = requests.put(
         f"{current_app.config['URL_API_USER']}/users",
         json=user,
         timeout=(3.05, 9.1),
