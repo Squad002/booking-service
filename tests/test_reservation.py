@@ -163,7 +163,7 @@ confirm_booking = {
       "firstname": "Linus",
       "lastname": "Torvalds",
       "email": "linus@torvalds.com",
-      "fiscal_code": "FCGZPX89A57E015V"
+      "fiscalcode": "FCGZPX89A57E015V"
     }
   ]
 }

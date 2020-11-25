@@ -300,7 +300,7 @@ def confirm_booking(restaurant_id):
         for i, field in enumerate(form.people):
             user = (
                 db.session.query(User)
-                .filter_by(fiscal_code=field.fiscal_code.data)
+                .filter_by(fiscalcode=field.fiscalcode.data)
                 .first()
             )
 
@@ -314,7 +314,7 @@ def confirm_booking(restaurant_id):
                         firstname=field.firstname.data,
                         lastname=field.lastname.data,
                         email=field.email.data,
-                        fiscal_code=field.fiscal_code.data,
+                        fiscalcode=field.fiscalcode.data,
                     )
                     db.session.add(user)
                     db.session.commit()

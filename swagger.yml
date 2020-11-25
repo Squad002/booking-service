@@ -326,7 +326,7 @@ components:
         - firstname
         - lastname
         - email
-        - fiscal_code
+        - fiscalcode
       type: object
       properties:
         firstname:
@@ -341,7 +341,7 @@ components:
           type: string
           description: Email of the user
           example: linus@torvalds.com
-        fiscal_code:
+        fiscalcode:
           type: string
           description: Fiscalcode of the user
           example: FCGZPX89A57E015V

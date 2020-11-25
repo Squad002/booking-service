@@ -60,7 +60,7 @@ def insert_booking():
         )
         db.session.commit()
 
-    return "Created", 201
+    return booking_number, 201 #TODO fix swagger dire che si ritorna booking_number
 
 
 def confirm_booking():
@@ -79,14 +79,14 @@ def confirm_booking():
     new_user_list = []
     for user_booking in users_list:
 
-        user = fake_api.get_user_fiscal_code(user_booking["fiscal_code"])
+        user = fake_api.get_user_fiscalcode(user_booking["fiscalcode"])
         if not user:  # check if user exist
             user = fake_api.get_user_email(user_booking["email"])  # check if email is already in the db or not
             if not user:
                 user = fake_api.generate_user(
                     user_booking["firstname"],
                     user_booking["lastname"],
-                    user_booking["fiscal_code"],
+                    user_booking["fiscalcode"],
                     user_booking["email"],
                 )
                 new_user_list.append(user["id"])
@@ -99,7 +99,7 @@ def confirm_booking():
             if (
                 user["firstname"] != user_booking["firstname"]
                 or user["lastname"] != user_booking["lastname"]
-                or user["fiscalcode"] != user_booking["fiscal_code"]
+                or user["fiscalcode"] != user_booking["fiscalcode"]
                 or user["email"] != user_booking["email"]
             ):
                 message = (

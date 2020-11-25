@@ -228,7 +228,7 @@ confirm_booking = {
       "firstname": "Linus",
       "lastname": "Torvalds",
       "email": "linus@torvalds.com",
-      "fiscal_code": "FCGZPX89A57E015V"
+      "fiscalcode": "FCGZPX89A57E015V"
     }
   ]
 }
@@ -240,7 +240,7 @@ confirm_booking_new_user = {
       "firstname": "Chuck",
       "lastname": "Norris",
       "email": "chuck@norris.it",
-      "fiscal_code": "FCGZPX89A57E0155"
+      "fiscalcode": "FCGZPX89A57E0155"
     }
   ]
 }
@@ -252,7 +252,7 @@ confirm_booking_email_already_used = {
       "firstname": "Linus",
       "lastname": "Torvalds",
       "email": "example@example.com",
-      "fiscal_code": "FCGZPX89A57E015Q"
+      "fiscalcode": "FCGZPX89A57E015Q"
     }
   ]
 }
@@ -264,13 +264,13 @@ double_users = {
         "firstname": "Linus",
         "lastname": "Torvalds",
         "email": "linus@torvalds.com",
-        "fiscal_code": "FCGZPX89A57E015V"
+        "fiscalcode": "FCGZPX89A57E015V"
     },
     {
         "firstname": "Linus",
         "lastname": "Torvalds",
         "email": "linus@torvalds.com",
-        "fiscal_code": "FCGZPX89A57E015V"
+        "fiscalcode": "FCGZPX89A57E015V"
     }
   ]
 }
@@ -282,13 +282,13 @@ wrong_user = {
         "firstname": "Linus",
         "lastname": "Torvalds",
         "email": "linus@torvalds.com",
-        "fiscal_code": "FCGZPX89A57E015V"
+        "fiscalcode": "FCGZPX89A57E015V"
     },
     {
         "firstname": "Linus",
         "lastname": "Torvalds",
         "email": "linus1@torvalds.com",
-        "fiscal_code": "FCGZPX89A57E015V"
+        "fiscalcode": "FCGZPX89A57E015V"
     }
   ]
 }

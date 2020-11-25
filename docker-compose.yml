@@ -1,0 +1,22 @@
+version: "3.4"
+
+services:
+  booking:
+    image: booking-service:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env.docker
+    ports:
+      - 5002:5000
+
+  user:
+    image: user-service:latest
+    ports:
+      - 5001:5000
+
+  restaurant:
+    image: restaurant-service:latest
+    ports:
+      - 5003:5000

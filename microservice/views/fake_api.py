@@ -3,9 +3,9 @@ from flask import current_app
 from flask import jsonify
 
 
-def get_user_fiscal_code(fiscal_code):
+def get_user_fiscalcode(fiscalcode):
     response = requests.get(
-        f"{current_app.config['URL_API_USER']}/users?fiscalcode={fiscal_code}",
+        f"{current_app.config['URL_API_USER']}/users?fiscalcode={fiscalcode}",
         timeout=(3.05, 9.1),
     ).json()
 
@@ -29,15 +29,12 @@ def get_user_id(id):
 
     return response
 
-def generate_user(firstname, lastname, fiscal_code, email):
+def generate_user(firstname, lastname, fiscalcode, email):
     user = {
         "email": email,
         "firstname": firstname,
-        "fiscalcode": fiscal_code,
+        "fiscalcode": fiscalcode,
         "lastname": lastname,
-        "password": "None", #TODO non inviare questi dati
-        "birthdate": "2020-05-10",
-        "phonenumber": "333"
     }
 
     requests.post(
@@ -46,7 +43,7 @@ def generate_user(firstname, lastname, fiscal_code, email):
         timeout=(3.05, 9.1),
     )
 
-    response = get_user_fiscal_code(fiscal_code)
+    response = get_user_fiscalcode(fiscalcode)
     return response[0]
 
 
