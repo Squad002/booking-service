@@ -128,7 +128,7 @@ def confirm_booking():
                 start_booking=booking.start_booking,
                 end_booking=booking.end_booking,
                 confirmed_booking=True,
-                checkin=True
+                checkin=False
             )
         )
 
@@ -137,7 +137,7 @@ def confirm_booking():
         db.session.rollback()
         return message, 401
     else:
-        booking.checkin = True
+        booking.confirmed_booking = True
         db.session.commit()
         return "Booking confirmed", 201
 
