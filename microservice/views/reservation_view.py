@@ -28,9 +28,10 @@ def reservations_list(restaurant_id, start_day):
     for booking in booking_list:
         restaurant_name = fake_api.restaurant_name(booking[0].restaurant_id)
         reservations_list.append({
-            "booking_numer": booking[0].booking_number,
+            "booking_number": booking[0].booking_number,
             "restaurant_name": restaurant_name,
-            "people_number": booking[1]
+            "people_number": booking[1],
+            "date": booking[0].start_booking
         })
 
     return reservations_list, 200

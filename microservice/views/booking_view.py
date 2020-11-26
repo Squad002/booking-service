@@ -179,4 +179,8 @@ def checkin_booking_check(booking_number):
     if response is None:
         return "Booking not found", 404
     else:
-        return jsonify(response), 200
+        res = {
+            "confirmed_booking": response[0],
+            "checkin": response[1]
+        }
+        return jsonify(res), 200

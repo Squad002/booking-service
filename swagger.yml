@@ -374,6 +374,7 @@ components:
         - booking_number
         - people_number
         - restaurant_name
+        - date
       type: object
       properties:
         booking_number:
@@ -388,6 +389,10 @@ components:
           type: string
           description: Restaturant's name
           example: "Pizzeria Gino Sorbillo"
+        date:
+          type: string
+          description: Date and hour of the booking
+          example: "2020-01-01 12:00"
 
     Reservation checkin:
       required:

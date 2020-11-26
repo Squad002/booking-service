@@ -10,8 +10,10 @@ fileHandler.setFormatter(
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY") or "top secret"
 
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URI") or "sqlite:///gooutsafe.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI = (
+        os.environ.get("DATABASE_URI") or "sqlite:///../gooutsafe.db"
+    )
 
     # Services
     URL_API_RESTAURANT = os.environ.get("URL_API_RESTAURANT") or "http://localhost:5003"
